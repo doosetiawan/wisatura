@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisatura - Biro Perjalanan Wisata Impianmu</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Fonts and Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981', // Main Emerald/Green
+                            600: '#059669', // Hover state
+                            700: '#047857',
+                            900: '#064e3b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom scrollbar for a polished look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669; 
+        }
+        
+        /* Utility class to hide scrollbar but keep functionality if needed */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased bg-gray-50 selection:bg-brand-500 selection:text-white">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white font-display font-bold text-xl group-hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/30">
+                        W
+                    </div>
+                    <span id="logo-text" class="font-display font-bold text-2xl tracking-tight text-white transition-colors duration-300">
+                        wisatura
+                    </span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#beranda" class="nav-link text-white hover:text-brand-400 font-medium transition-colors text-sm uppercase tracking-wider">Beranda</a>
+                    <a href="#layanan" class="nav-link text-white hover:text-brand-400 font-medium transition-colors text-sm uppercase tracking-wider">Layanan</a>
+                    <a href="#destinasi" class="nav-link text-white hover:text-brand-400 font-medium transition-colors text-sm uppercase tracking-wider">Destinasi</a>
+                    <a href="#kontak" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2.5 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-brand-500/30">
+                        Hubungi Kami
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-brand-400 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-xl absolute w-full left-0 top-full">
+            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
+                <a href="#beranda" class="block px-3 py-2 text-gray-800 font-medium hover:bg-brand-50 hover:text-brand-600 rounded-md">Beranda</a>
+                <a href="#layanan" class="block px-3 py-2 text-gray-800 font-medium hover:bg-brand-50 hover:text-brand-600 rounded-md">Layanan</a>
+                <a href="#destinasi" class="block px-3 py-2 text-gray-800 font-medium hover:bg-brand-50 hover:text-brand-600 rounded-md">Destinasi</a>
+                <a href="#kontak" class="block mt-4 px-3 py-3 text-center bg-brand-500 text-white font-medium rounded-md hover:bg-brand-600">Hubungi Kami</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <!-- Using a high quality Unsplash image representing beautiful nature/travel in Indonesia -->
+            <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Bali Landscape" class="w-full h-full object-cover object-center" />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/60"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mt-16">
+            <span data-aos="fade-down" class="inline-block py-1 px-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-medium mb-6 uppercase tracking-widest">
+                Eksplorasi Tanpa Batas
+            </span>
+            <h1 data-aos="fade-up" data-aos-delay="100" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-tight mb-6">
+                Wujudkan Liburan <span class="text-brand-400">Impianmu</span> Bersama Kami.
+            </h1>
+            <p data-aos="fade-up" data-aos-delay="200" class="mt-4 text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed mb-10">
+                Tinggalkan rutinitas sejenak. Kami hadir merancang pengalaman wisata terbaik, aman, dan tak terlupakan untuk Anda dan keluarga.
+            </p>
+            <div data-aos="fade-up" data-aos-delay="300" class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#destinasi" class="bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:-translate-y-1 shadow-xl shadow-brand-500/30 flex items-center justify-center gap-2">
+                    Lihat Paket Wisata <i class="fas fa-arrow-right text-sm"></i>
+                </a>
+                <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fab fa-tiktok"></i> @wisaturatrip
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
+            <a href="#layanan" class="text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Mengapa Memilih Kami (About/Services) -->
+    <section id="layanan" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brand-500 font-semibold tracking-wide uppercase text-sm mb-3">Keunggulan Kami</h2>
+                <h3 class="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">Mengapa Memilih Wisatura?</h3>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    Kami berkomitmen memberikan layanan terbaik untuk memastikan setiap detik perjalanan Anda penuh dengan kenyamanan dan kebahagiaan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div data-aos="fade-up" data-aos-delay="100" class="bg-brand-600 rounded-3xl p-8 hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-500/20 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-user-tie text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold text-white mb-3">Pemandu Profesional</h4>
+                    <p class="text-brand-50 leading-relaxed">
+                        Perjalanan Anda didampingi oleh pemandu lokal berlisensi, berpengalaman, dan ramah yang siap menceritakan setiap sudut keindahan destinasi.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div data-aos="fade-up" data-aos-delay="200" class="bg-brand-600 rounded-3xl p-8 hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-500/20 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-wallet text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold text-white mb-3">Harga Terjangkau & Transparan</h4>
+                    <p class="text-brand-50 leading-relaxed">
+                        Nikmati paket wisata premium dengan harga yang kompetitif. Tanpa biaya tersembunyi, semua fasilitas sudah termasuk sesuai kesepakatan.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div data-aos="fade-up" data-aos-delay="300" class="bg-brand-600 rounded-3xl p-8 hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-500/20 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-star text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-display font-bold text-white mb-3">Fasilitas Premium</h4>
+                    <p class="text-brand-50 leading-relaxed">
+                        Mulai dari transportasi eksklusif, penginapan nyaman, hingga dokumentasi perjalanan yang estetik untuk menghiasi sosial media Anda.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinasi (Paket Wisata) -->
+    <section id="destinasi" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6" data-aos="fade-up">
+                <div class="max-w-2xl">
+                    <h2 class="text-brand-500 font-semibold tracking-wide uppercase text-sm mb-3">Paket Eksklusif</h2>
+                    <h3 class="text-3xl md:text-4xl font-display font-bold text-gray-900">Destinasi Terpopuler</h3>
+                </div>
+                <a href="#" class="inline-flex items-center gap-2 text-brand-600 font-medium hover:text-brand-700 transition-colors">
+                    Lihat Semua Destinasi <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Destinasi 1 -->
+                <div data-aos="fade-up" data-aos-delay="100" class="bg-brand-600 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-brand-500/30 hover:-translate-y-1 transition-all duration-300 group flex flex-col">
+                    <div class="relative overflow-hidden aspect-[4/3]">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bali" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-900 shadow-sm">
+                            <i class="fas fa-fire text-orange-500 mr-1"></i> Best Seller
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-display font-bold text-white">Nusa Penida, Bali</h4>
+                                <p class="text-sm text-brand-100 flex items-center gap-1 mt-1">
+                                    <i class="fas fa-map-marker-alt text-white"></i> Indonesia
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-1 text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <span class="text-white font-medium">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-brand-50 text-sm mb-6 line-clamp-2">
+                            Eksplorasi keindahan Kelingking Beach, Broken Beach, dan rasakan magisnya alam Bali yang memukau.
+                        </p>
+                        <div class="mt-auto flex items-center justify-between pt-4 border-t border-brand-500/50">
+                            <div>
+                                <p class="text-xs text-brand-200">Mulai dari</p>
+                                <p class="text-lg font-bold text-white">Rp 1.500K <span class="text-xs text-brand-200 font-normal">/pax</span></p>
+                            </div>
+                            <button class="bg-white hover:bg-gray-100 text-brand-700 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
+                                Detail Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destinasi 2 -->
+                <div data-aos="fade-up" data-aos-delay="200" class="bg-brand-600 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-brand-500/30 hover:-translate-y-1 transition-all duration-300 group flex flex-col">
+                    <div class="relative overflow-hidden aspect-[4/3]">
+                        <img src="https://images.unsplash.com/photo-1570789210967-2074f16456f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Labuan Bajo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-display font-bold text-white">Labuan Bajo</h4>
+                                <p class="text-sm text-brand-100 flex items-center gap-1 mt-1">
+                                    <i class="fas fa-map-marker-alt text-white"></i> Nusa Tenggara
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-1 text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <span class="text-white font-medium">4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-brand-50 text-sm mb-6 line-clamp-2">
+                            Sailing komodo mewah, treking Pulau Padar, dan saksikan lanskap ikonik dari atas bukit yang menakjubkan.
+                        </p>
+                        <div class="mt-auto flex items-center justify-between pt-4 border-t border-brand-500/50">
+                            <div>
+                                <p class="text-xs text-brand-200">Mulai dari</p>
+                                <p class="text-lg font-bold text-white">Rp 3.200K <span class="text-xs text-brand-200 font-normal">/pax</span></p>
+                            </div>
+                            <button class="bg-white hover:bg-gray-100 text-brand-700 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
+                                Detail Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destinasi 3 -->
+                <div data-aos="fade-up" data-aos-delay="300" class="bg-brand-600 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-brand-500/30 hover:-translate-y-1 transition-all duration-300 group flex flex-col">
+                    <div class="relative overflow-hidden aspect-[4/3]">
+                        <img src="https://images.unsplash.com/photo-1584285406085-3221cbdfa50f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bromo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-display font-bold text-white">Sunrise Bromo</h4>
+                                <p class="text-sm text-brand-100 flex items-center gap-1 mt-1">
+                                    <i class="fas fa-map-marker-alt text-white"></i> Jawa Timur
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-1 text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <span class="text-white font-medium">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-brand-50 text-sm mb-6 line-clamp-2">
+                            Kejar matahari terbit terindah di Gunung Bromo dengan petualangan Jeep seru melintasi lautan pasir.
+                        </p>
+                        <div class="mt-auto flex items-center justify-between pt-4 border-t border-brand-500/50">
+                            <div>
+                                <p class="text-xs text-brand-200">Mulai dari</p>
+                                <p class="text-lg font-bold text-white">Rp 750K <span class="text-xs text-brand-200 font-normal">/pax</span></p>
+                            </div>
+                            <button class="bg-white hover:bg-gray-100 text-brand-700 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
+                                Detail Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action & Footer -->
+    <footer id="kontak" class="bg-gray-900 text-white pt-20 relative overflow-hidden">
+        <!-- Abstract Decoration -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-brand-500/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-500/10 blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- CTA Block -->
+            <div data-aos="fade-up" class="bg-brand-600 rounded-3xl p-8 md:p-12 text-center mb-20 shadow-2xl relative overflow-hidden">
+                <!-- Background Pattern for CTA -->
+                <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+                
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 relative z-10">Siap Untuk Mengukir Kenangan Baru?</h2>
+                <p class="text-brand-100 mb-8 max-w-2xl mx-auto relative z-10 text-lg">
+                    Hubungi tim kami sekarang dan dapatkan penawaran spesial untuk perjalanan liburan Anda berikutnya. Jangan biarkan rencana liburan sekadar wacana!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
+                    <a href="https://wa.me/6281234567890" target="_blank" class="bg-white text-brand-600 hover:bg-gray-50 px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-xl flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-xl"></i> Chat WhatsApp
+                    </a>
+                    <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="bg-gray-900 text-white hover:bg-black px-8 py-4 rounded-full font-semibold transition-all shadow-xl flex items-center justify-center gap-2 border border-gray-700">
+                        <i class="fab fa-tiktok"></i> Follow TikTok Kami
+                    </a>
+                </div>
+            </div>
+
+            <!-- Footer Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-gray-800">
+                <!-- Brand -->
+                <div class="lg:col-span-1">
+                    <a href="#" class="flex items-center gap-2 mb-6">
+                        <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white font-display font-bold text-xl">
+                            W
+                        </div>
+                        <span class="font-display font-bold text-2xl tracking-tight text-white">
+                            wisatura
+                        </span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Biro perjalanan terpercaya yang siap membawa Anda menjelajahi keindahan nusantara dan dunia dengan layanan premium.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-white transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-white transition-all">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-white transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="text-white font-display font-semibold mb-6">Perusahaan</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Tentang Kami</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Tim Profesional</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Karir</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Blog & Artikel</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-display font-semibold mb-6">Layanan</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Open Trip</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Private Trip</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Honeymoon Package</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-brand-400 transition-colors text-sm">Corporate Gathering</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-white font-display font-semibold mb-6">Hubungi Kami</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-brand-500 mt-1"></i>
+                            <span class="text-gray-400 text-sm">Jl. Pariwisata Raya No.12, Jakarta Selatan, Indonesia</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-phone text-brand-500"></i>
+                            <span class="text-gray-400 text-sm">+62 812-3456-7890</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-brand-500"></i>
+                            <span class="text-gray-400 text-sm">hello@wisatura.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="py-6 text-center flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">
+                    &copy; <script>document.write(new Date().getFullYear())</script> Wisatura Travel. All rights reserved.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Syarat & Ketentuan</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Kebijakan Privasi</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS JS for Animations -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            once: true, // whether animation should happen only once - while scrolling down
+            offset: 50, // offset (in px) from the original trigger point
+            duration: 800, // values from 0 to 3000, with step 50ms
+            easing: 'ease-out-cubic', // default easing for AOS animations
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        const logoText = document.getElementById('logo-text');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                // Scrolled State
+                navbar.classList.remove('bg-transparent', 'py-4');
+                navbar.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'py-3');
+                
+                logoText.classList.remove('text-white');
+                logoText.classList.add('text-gray-900');
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('text-white', 'hover:text-brand-400');
+                    link.classList.add('text-gray-600', 'hover:text-brand-600');
+                });
+                
+                mobileMenuBtn.classList.remove('text-white');
+                mobileMenuBtn.classList.add('text-gray-800');
+            } else {
+                // Top State
+                navbar.classList.add('bg-transparent', 'py-4');
+                navbar.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'py-3');
+                
+                logoText.classList.add('text-white');
+                logoText.classList.remove('text-gray-900');
+                
+                navLinks.forEach(link => {
+                    link.classList.add('text-white', 'hover:text-brand-400');
+                    link.classList.remove('text-gray-600', 'hover:text-brand-600');
+                });
+                
+                mobileMenuBtn.classList.add('text-white');
+                mobileMenuBtn.classList.remove('text-gray-800');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

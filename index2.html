@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisatura — Biro Perjalanan Wisata Terpercaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-400-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-500-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-600-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-700-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-800-normal.css">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        :root {
+            --green-50: #f0fdf4;
+            --green-100: #dcfce7;
+            --green-200: #bbf7d0;
+            --green-300: #86efac;
+            --green-400: #4ade80;
+            --green-500: #22c55e;
+            --green-600: #16a34a;
+            --green-700: #15803d;
+            --green-800: #166534;
+            --green-900: #14532d;
+            --green-950: #052e16;
+        }
+        
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        
+        /* Custom cursor trail */
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--green-500);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        /* Navbar */
+        .nav-scrolled {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(20, 83, 45, 0.08);
+        }
+        
+        /* Hero */
+        .hero-bg {
+            background: 
+                radial-gradient(ellipse at top left, rgba(74, 222, 128, 0.15), transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(22, 163, 74, 0.1), transparent 50%),
+                linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+        }
+        
+        .hero-illustration {
+            filter: drop-shadow(0 20px 40px rgba(20, 83, 45, 0.15));
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(-10px); }
+            50% { transform: translateY(10px); }
+        }
+        .float { animation: float 6s ease-in-out infinite; }
+        .float-slow { animation: floatSlow 8s ease-in-out infinite; }
+        .float-reverse { animation: floatReverse 7s ease-in-out infinite; }
+        
+        /* Marquee */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            animation: marquee 30s linear infinite;
+        }
+        
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Card hover */
+        .dest-card {
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .dest-card:hover {
+            transform: translateY(-8px);
+        }
+        .dest-card:hover .dest-img {
+            transform: scale(1.08);
+        }
+        .dest-img {
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        /* Package card */
+        .pkg-card {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .pkg-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px -15px rgba(20, 83, 45, 0.2);
+        }
+        .pkg-featured {
+            background: linear-gradient(135deg, #14532d 0%, #166534 50%, #15803d 100%);
+        }
+        
+        /* Button */
+        .btn-primary {
+            background: var(--green-700);
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            background: var(--green-800);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -5px rgba(20, 83, 45, 0.4);
+        }
+        
+        .btn-outline {
+            border: 1.5px solid var(--green-800);
+            color: var(--green-800);
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background: var(--green-800);
+            color: white;
+        }
+        
+        /* Underline hover */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--green-700);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Stats counter */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Blob */
+        .blob {
+            border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+            animation: blob 12s ease-in-out infinite;
+        }
+        @keyframes blob {
+            0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+            33% { border-radius: 70% 30% 46% 54% / 30% 60% 40% 70%; }
+            66% { border-radius: 30% 70% 58% 42% / 60% 30% 70% 40%; }
+        }
+        
+        /* Scroll indicator */
+        @keyframes scrollDown {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(10px); opacity: 0; }
+        }
+        .scroll-dot {
+            animation: scrollDown 1.5s ease-in-out infinite;
+        }
+        
+        /* Testimonial */
+        .testi-card {
+            transition: all 0.4s ease;
+        }
+        .testi-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        /* Gradient text */
+        .text-gradient {
+            background: linear-gradient(135deg, #15803d 0%, #22c55e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* TikTok button */
+        .tiktok-btn {
+            background: linear-gradient(135deg, #000000 0%, #25F4EE 50%, #FE2C55 100%);
+            background-size: 200% 200%;
+            animation: tiktokGradient 3s ease infinite;
+        }
+        @keyframes tiktokGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Grid pattern */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(20, 83, 45, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(20, 83, 45, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        /* Service card */
+        .service-card {
+            transition: all 0.4s ease;
+        }
+        .service-card:hover {
+            background: var(--green-700);
+            color: white;
+        }
+        .service-card:hover .service-icon {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        .service-card:hover .service-icon svg {
+            color: white;
+        }
+        
+        /* FAQ */
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+        .faq-item.open {
+            background: var(--green-50);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+        }
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        /* Footer wave */
+        .footer-wave {
+            background: linear-gradient(180deg, transparent 0%, #052e16 100%);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: var(--green-600); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--green-700); }
+        
+        /* Loading */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-logo {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-logo flex items-center gap-3">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <path d="M24 4L8 14v20l16 10 16-10V14L24 4z" fill="#15803d"/>
+                <path d="M24 14l-8 5v10l8 5 8-5V19l-8-5z" fill="#22c55e"/>
+                <circle cx="24" cy="24" r="3" fill="white"/>
+            </svg>
+            <span class="text-2xl font-bold text-green-900">Wisatura</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#home" class="flex items-center gap-2.5">
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 4L8 14v20l16 10 16-10V14L24 4z" fill="#15803d"/>
+                        <path d="M24 14l-8 5v10l8 5 8-5V19l-8-5z" fill="#22c55e"/>
+                        <circle cx="24" cy="24" r="3" fill="white"/>
+                    </svg>
+                    <span class="text-xl font-bold text-green-900">Wisatura</span>
+                </a>
+                
+                <div class="hidden lg:flex items-center gap-10">
+                    <a href="#home" class="nav-link text-sm font-medium text-gray-700 hover:text-green-700">Beranda</a>
+                    <a href="#about" class="nav-link text-sm font-medium text-gray-700 hover:text-green-700">Tentang</a>
+                    <a href="#destinations" class="nav-link text-sm font-medium text-gray-700 hover:text-green-700">Destinasi</a>
+                    <a href="#packages" class="nav-link text-sm font-medium text-gray-700 hover:text-green-700">Paket</a>
+                    <a href="#testimonials" class="nav-link text-sm font-medium text-gray-700 hover:text-green-700">Testimoni</a>
+                    <a href="#contact" class="nav-link text-sm font-medium text-gray-700 hover:text-green-700">Kontak</a>
+                </div>
+                
+                <div class="hidden lg:flex items-center gap-3">
+                    <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 hover:border-green-700 transition">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                        <span class="text-sm font-medium">TikTok</span>
+                    </a>
+                    <a href="#contact" class="btn-primary px-5 py-2.5 rounded-full text-sm font-semibold">
+                        Pesan Trip
+                    </a>
+                </div>
+                
+                <button id="menuBtn" class="lg:hidden p-2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-[60] p-8">
+        <button id="closeMenu" class="absolute top-6 right-6 p-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <div class="mt-16 flex flex-col gap-6">
+            <a href="#home" class="mobile-link text-lg font-medium text-gray-800">Beranda</a>
+            <a href="#about" class="mobile-link text-lg font-medium text-gray-800">Tentang</a>
+            <a href="#destinations" class="mobile-link text-lg font-medium text-gray-800">Destinasi</a>
+            <a href="#packages" class="mobile-link text-lg font-medium text-gray-800">Paket</a>
+            <a href="#testimonials" class="mobile-link text-lg font-medium text-gray-800">Testimoni</a>
+            <a href="#contact" class="mobile-link text-lg font-medium text-gray-800">Kontak</a>
+            <div class="pt-6 border-t border-gray-100 flex flex-col gap-3">
+                <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="flex items-center gap-2 px-4 py-3 rounded-full border border-gray-200">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                    <span class="text-sm font-medium">@wisaturatrip</span>
+                </a>
+                <a href="#contact" class="btn-primary px-5 py-3 rounded-full text-sm font-semibold text-center">Pesan Trip Sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section id="home" class="hero-bg relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 grid-pattern opacity-60"></div>
+        
+        <!-- Decorative blobs -->
+        <div class="absolute top-20 right-10 w-72 h-72 bg-green-200/40 blob blur-3xl"></div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-green-300/30 blob blur-3xl" style="animation-delay: -4s;"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-green-100 shadow-sm mb-6">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="text-xs font-semibold text-green-800 tracking-wide">BIRO PERJALANAN WISATA TERPERCAYA</span>
+                    </div>
+                    
+                    <h1 class="text-5xl lg:text-7xl font-extrabold text-green-950 leading-[1.05] tracking-tight mb-6">
+                        Jelajahi<br>
+                        Nusantara<br>
+                        <span class="text-gradient">Bersama Kami</span>
+                    </h1>
+                    
+                    <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-lg">
+                        Wisatura membawa Anda menjelajahi keindahan Indonesia dengan pengalaman yang otentik, pelayanan profesional, dan harga yang bersahabat.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-3 mb-12">
+                        <a href="#packages" class="btn-primary px-7 py-3.5 rounded-full font-semibold inline-flex items-center gap-2">
+                            Lihat Paket Wisata
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                        <a href="#about" class="btn-outline px-7 py-3.5 rounded-full font-semibold">
+                            Tentang Kami
+                        </a>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-green-100">
+                        <div>
+                            <div class="text-3xl lg:text-4xl font-bold text-green-800 stat-number" data-target="500">0</div>
+                            <div class="text-sm text-gray-500 mt-1">Trip Sukses</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl lg:text-4xl font-bold text-green-800 stat-number" data-target="50">0</div>
+                            <div class="text-sm text-gray-500 mt-1">Destinasi</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl lg:text-4xl font-bold text-green-800 stat-number" data-target="10000">0</div>
+                            <div class="text-sm text-gray-500 mt-1">Traveler Happy</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hero Illustration -->
+                <div class="reveal relative">
+                    <div class="relative hero-illustration">
+                        <!-- Main scene SVG -->
+                        <svg viewBox="0 0 500 500" class="w-full float-slow">
+                            <!-- Sky background -->
+                            <defs>
+                                <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#bbf7d0"/>
+                                    <stop offset="100%" stop-color="#dcfce7"/>
+                                </linearGradient>
+                                <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#15803d"/>
+                                    <stop offset="100%" stop-color="#14532d"/>
+                                </linearGradient>
+                                <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#22c55e"/>
+                                    <stop offset="100%" stop-color="#16a34a"/>
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Circle backdrop -->
+                            <circle cx="250" cy="250" r="220" fill="url(#skyGrad)"/>
+                            
+                            <!-- Sun -->
+                            <circle cx="380" cy="140" r="40" fill="#fbbf24" opacity="0.9"/>
+                            <circle cx="380" cy="140" r="55" fill="#fbbf24" opacity="0.2"/>
+                            
+                            <!-- Clouds -->
+                            <g opacity="0.7">
+                                <ellipse cx="100" cy="120" rx="35" ry="12" fill="white"/>
+                                <ellipse cx="120" cy="115" rx="25" ry="10" fill="white"/>
+                            </g>
+                            <g opacity="0.5">
+                                <ellipse cx="300" cy="90" rx="30" ry="10" fill="white"/>
+                            </g>
+                            
+                            <!-- Mountains -->
+                            <path d="M50 320 L150 180 L250 280 L350 160 L450 320 Z" fill="url(#mountainGrad)" opacity="0.6"/>
+                            <path d="M30 340 L130 220 L220 300 L320 200 L420 340 Z" fill="#166534" opacity="0.8"/>
+                            
+                            <!-- Snow caps -->
+                            <path d="M140 195 L150 180 L160 195 L155 200 L145 200 Z" fill="white" opacity="0.9"/>
+                            <path d="M340 175 L350 160 L360 175 L355 180 L345 180 Z" fill="white" opacity="0.9"/>
+                            
+                            <!-- Water -->
+                            <path d="M30 340 Q250 320 470 340 L470 440 Q250 460 30 440 Z" fill="url(#waterGrad)"/>
+                            
+                            <!-- Water ripples -->
+                            <path d="M80 370 Q120 365 160 370" stroke="white" stroke-width="1.5" fill="none" opacity="0.5"/>
+                            <path d="M200 385 Q240 380 280 385" stroke="white" stroke-width="1.5" fill="none" opacity="0.5"/>
+                            <path d="M320 375 Q360 370 400 375" stroke="white" stroke-width="1.5" fill="none" opacity="0.5"/>
+                            
+                            <!-- Boat -->
+                            <g transform="translate(230, 350)">
+                                <path d="M-30 0 L30 0 L25 15 L-25 15 Z" fill="#78350f"/>
+                                <rect x="-1" y="-35" width="2" height="35" fill="#451a03"/>
+                                <path d="M0 -35 L25 -20 L0 -5 Z" fill="#dc2626"/>
+                            </g>
+                            
+                            <!-- Palm tree left -->
+                            <g transform="translate(80, 300)">
+                                <path d="M0 0 Q-2 -20 0 -40" stroke="#78350f" stroke-width="4" fill="none"/>
+                                <path d="M0 -40 Q-25 -45 -35 -30" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -40 Q25 -45 35 -30" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -40 Q-15 -55 -25 -45" stroke="#166534" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -40 Q15 -55 25 -45" stroke="#166534" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -40 Q0 -60 5 -55" stroke="#22c55e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </g>
+                            
+                            <!-- Palm tree right -->
+                            <g transform="translate(420, 310)">
+                                <path d="M0 0 Q2 -15 0 -35" stroke="#78350f" stroke-width="4" fill="none"/>
+                                <path d="M0 -35 Q-20 -40 -30 -28" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -35 Q20 -40 30 -28" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -35 Q-10 -50 -20 -42" stroke="#166534" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -35 Q10 -50 20 -42" stroke="#166534" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </g>
+                            
+                            <!-- Birds -->
+                            <g fill="none" stroke="#14532d" stroke-width="2" stroke-linecap="round">
+                                <path d="M180 130 Q185 125 190 130 Q195 125 200 130"/>
+                                <path d="M220 150 Q225 145 230 150 Q235 145 240 150"/>
+                            </g>
+                        </svg>
+                        
+                        <!-- Floating cards -->
+                        <div class="absolute top-8 -left-4 bg-white rounded-2xl shadow-xl p-4 float border border-green-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                        <path d="M20 6L9 17l-5-5"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-500">Trip Selesai</div>
+                                    <div class="font-bold text-green-900">500+ Trip</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-12 -right-4 bg-white rounded-2xl shadow-xl p-4 float-reverse border border-green-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#fbbf24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-500">Rating Pelanggan</div>
+                                    <div class="font-bold text-green-900">4.9 / 5.0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute top-1/2 -right-8 bg-green-700 text-white rounded-2xl shadow-xl p-4 float border border-green-600">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-green-200">Destinasi</div>
+                                    <div class="font-bold">50+ Lokasi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block">
+            <div class="w-6 h-10 border-2 border-green-700 rounded-full flex justify-center pt-2">
+                <div class="w-1 h-2 bg-green-700 rounded-full scroll-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <section class="py-8 bg-green-950 overflow-hidden">
+        <div class="flex whitespace-nowrap">
+            <div class="marquee-track flex items-center gap-12 pr-12">
+                <span class="text-white/80 text-lg font-semibold">✦ BALI</span>
+                <span class="text-green-400 text-lg font-semibold">✦ RAJA AMPAT</span>
+                <span class="text-white/80 text-lg font-semibold">✦ BromO</span>
+                <span class="text-green-400 text-lg font-semibold">✦ LABUAN BAJO</span>
+                <span class="text-white/80 text-lg font-semibold">✦ YOGYAKARTA</span>
+                <span class="text-green-400 text-lg font-semibold">✦ LOMBOK</span>
+                <span class="text-white/80 text-lg font-semibold">✦ KOMODO</span>
+                <span class="text-green-400 text-lg font-semibold">✦ BELITUNG</span>
+                <span class="text-white/80 text-lg font-semibold">✦ DERAWAN</span>
+                <span class="text-green-400 text-lg font-semibold">✦ TORAJA</span>
+                <!-- Duplicate for seamless loop -->
+                <span class="text-white/80 text-lg font-semibold">✦ BALI</span>
+                <span class="text-green-400 text-lg font-semibold">✦ RAJA AMPAT</span>
+                <span class="text-white/80 text-lg font-semibold">✦ BromO</span>
+                <span class="text-green-400 text-lg font-semibold">✦ LABUAN BAJO</span>
+                <span class="text-white/80 text-lg font-semibold">✦ YOGYAKARTA</span>
+                <span class="text-green-400 text-lg font-semibold">✦ LOMBOK</span>
+                <span class="text-white/80 text-lg font-semibold">✦ KOMODO</span>
+                <span class="text-green-400 text-lg font-semibold">✦ BELITUNG</span>
+                <span class="text-white/80 text-lg font-semibold">✦ DERAWAN</span>
+                <span class="text-green-400 text-lg font-semibold">✦ TORAJA</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="py-24 lg:py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal relative">
+                    <div class="relative">
+                        <!-- About illustration -->
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 lg:p-12 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-40 h-40 bg-green-200/50 blob blur-2xl"></div>
+                            
+                            <svg viewBox="0 0 400 400" class="relative w-full">
+                                <!-- Compass -->
+                                <circle cx="200" cy="200" r="150" fill="white" stroke="#15803d" stroke-width="2"/>
+                                <circle cx="200" cy="200" r="130" fill="none" stroke="#bbf7d0" stroke-width="1"/>
+                                
+                                <!-- Compass directions -->
+                                <text x="200" y="80" text-anchor="middle" fill="#15803d" font-size="20" font-weight="bold">N</text>
+                                <text x="200" y="335" text-anchor="middle" fill="#15803d" font-size="20" font-weight="bold">S</text>
+                                <text x="335" y="207" text-anchor="middle" fill="#15803d" font-size="20" font-weight="bold">E</text>
+                                <text x="65" y="207" text-anchor="middle" fill="#15803d" font-size="20" font-weight="bold">W</text>
+                                
+                                <!-- Compass needle -->
+                                <path d="M200 100 L210 200 L200 220 L190 200 Z" fill="#15803d"/>
+                                <path d="M200 300 L210 200 L200 180 L190 200 Z" fill="#22c55e"/>
+                                <circle cx="200" cy="200" r="10" fill="#14532d"/>
+                                
+                                <!-- Tick marks -->
+                                <g stroke="#15803d" stroke-width="2">
+                                    <line x1="200" y1="75" x2="200" y2="90"/>
+                                    <line x1="200" y1="310" x2="200" y2="325"/>
+                                    <line x1="310" y1="200" x2="325" y2="200"/>
+                                    <line x1="75" y1="200" x2="90" y2="200"/>
+                                </g>
+                                
+                                <!-- Small decorative icons -->
+                                <g transform="translate(120, 120)">
+                                    <circle r="15" fill="#22c55e" opacity="0.2"/>
+                                    <path d="M-5 -5 L5 -5 L5 5 L-5 5 Z" fill="#15803d"/>
+                                </g>
+                                <g transform="translate(280, 280)">
+                                    <circle r="15" fill="#22c55e" opacity="0.2"/>
+                                    <path d="M-5 0 L0 -8 L5 0 Z" fill="#15803d"/>
+                                </g>
+                            </svg>
+                            
+                            <!-- Floating badges -->
+                            <div class="absolute top-6 right-6 bg-white rounded-2xl shadow-lg p-4 float">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                            <path d="M2 17l10 5 10-5"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Sejak</div>
+                                        <div class="font-bold text-green-900 text-sm">2015</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="absolute bottom-6 left-6 bg-white rounded-2xl shadow-lg p-4 float-reverse">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500">Rating</div>
+                                        <div class="font-bold text-green-900 text-sm">4.9/5.0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal">
+                    <span class="text-green-700 font-semibold text-sm uppercase tracking-wider">Tentang Wisatura</span>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-green-950 mt-4 mb-6 leading-tight">
+                        Partner Perjalanan <br>
+                        <span class="text-gradient">Terpercaya Anda</span>
+                    </h2>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                        Wisatura adalah biro perjalanan wisata yang berkomitmen menghadirkan pengalaman menjelajah Nusantara yang otentik dan berkesan. Dengan pengalaman lebih dari satu dekade, kami memahami setiap detail perjalanan Anda.
+                    </p>
+                    
+                    <div class="space-y-5 mb-8">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-green-950 mb-1">Pelayanan Profesional</h4>
+                                <p class="text-gray-600 text-sm">Tim berpengalaman siap membantu setiap kebutuhan perjalanan Anda 24/7</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-green-950 mb-1">Harga Transparan</h4>
+                                <p class="text-gray-600 text-sm">Tidak ada biaya tersembunyi, semua sudah termasuk dalam paket</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-green-950 mb-1">Itinerary Fleksibel</h4>
+                                <p class="text-gray-600 text-sm">Sesuaikan perjalanan dengan preferensi dan budget Anda</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#contact" class="btn-primary px-7 py-3.5 rounded-full font-semibold inline-flex items-center gap-2">
+                        Konsultasi Gratis
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="py-24 bg-green-50/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-green-700 font-semibold text-sm uppercase tracking-wider">Layanan Kami</span>
+                <h2 class="text-4xl lg:text-5xl font-bold text-green-950 mt-4 mb-4">
+                    Solusi Perjalanan <span class="text-gradient">Lengkap</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Dari perencanaan hingga eksekusi, kami tangani semuanya untuk Anda
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="service-card bg-white rounded-2xl p-8 border border-green-100 reveal">
+                    <div class="service-icon w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-950 mb-2">Open Trip</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Bergabung dengan grup traveler lain dalam petualangan seru ke destinasi impian</p>
+                </div>
+                
+                <div class="service-card bg-white rounded-2xl p-8 border border-green-100 reveal">
+                    <div class="service-icon w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-950 mb-2">Private Trip</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Perjalanan privat eksklusif bersama keluarga atau teman terdekat</p>
+                </div>
+                
+                <div class="service-card bg-white rounded-2xl p-8 border border-green-100 reveal">
+                    <div class="service-icon w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-950 mb-2">Corporate Trip</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Paket outing dan gathering perusahaan dengan layanan profesional</p>
+                </div>
+                
+                <div class="service-card bg-white rounded-2xl p-8 border border-green-100 reveal">
+                    <div class="service-icon w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-950 mb-2">Ticketing</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Tiket pesawat, kereta, dan hotel dengan harga terbaik dan proses cepat</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DESTINATIONS -->
+    <section id="destinations" class="py-24 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 reveal">
+                <div>
+                    <span class="text-green-700 font-semibold text-sm uppercase tracking-wider">Destinasi Pilihan</span>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-green-950 mt-4 leading-tight">
+                        Tempat Wisata <br>
+                        <span class="text-gradient">Favorit Kami</span>
+                    </h2>
+                </div>
+                <p class="text-gray-600 max-w-md mt-6 lg:mt-0">
+                    Kurasi destinasi terbaik dari Sabang sampai Merauke yang siap memberikan pengalaman tak terlupakan
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Destination 1 - Bali -->
+                <div class="dest-card group relative rounded-3xl overflow-hidden h-[420px] cursor-pointer reveal">
+                    <div class="absolute inset-0 dest-img">
+                        <svg viewBox="0 0 400 500" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="baliSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#fbbf24"/>
+                                    <stop offset="50%" stop-color="#fb923c"/>
+                                    <stop offset="100%" stop-color="#0ea5e9"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="500" fill="url(#baliSky)"/>
+                            <circle cx="300" cy="120" r="50" fill="#fde047"/>
+                            <path d="M0 350 Q100 300 200 340 Q300 380 400 340 L400 500 L0 500 Z" fill="#0284c7"/>
+                            <path d="M0 380 Q100 350 200 380 Q300 410 400 380 L400 500 L0 500 Z" fill="#0369a1"/>
+                            <!-- Temple silhouette -->
+                            <g fill="#14532d">
+                                <rect x="150" y="280" width="100" height="70"/>
+                                <path d="M140 280 L200 240 L260 280 Z"/>
+                                <path d="M160 240 L200 210 L240 240 Z"/>
+                                <path d="M180 210 L200 190 L220 210 Z"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-semibold text-green-800">
+                        ★ Populer
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <div class="text-sm text-white/80 mb-1">Bali, Indonesia</div>
+                        <h3 class="text-2xl font-bold mb-2">Tanah Lot Temple</h3>
+                        <p class="text-sm text-white/80 mb-4">Pura ikonik di atas batu karang dengan sunset memukau</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">Mulai dari <span class="font-bold text-lg">Rp 1.5jt</span></div>
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-green-500 transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="group-hover:stroke-white">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 2 - Bromo -->
+                <div class="dest-card group relative rounded-3xl overflow-hidden h-[420px] cursor-pointer reveal">
+                    <div class="absolute inset-0 dest-img">
+                        <svg viewBox="0 0 400 500" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="bromoSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#f97316"/>
+                                    <stop offset="50%" stop-color="#dc2626"/>
+                                    <stop offset="100%" stop-color="#7c2d12"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="500" fill="url(#bromoSky)"/>
+                            <circle cx="200" cy="150" r="45" fill="#fde047" opacity="0.9"/>
+                            <!-- Mountains -->
+                            <path d="M0 350 L100 250 L180 320 L260 220 L340 300 L400 280 L400 500 L0 500 Z" fill="#451a03"/>
+                            <path d="M0 400 L80 320 L160 380 L240 300 L320 360 L400 340 L400 500 L0 500 Z" fill="#7c2d12"/>
+                            <!-- Smoke -->
+                            <ellipse cx="260" cy="210" rx="30" ry="15" fill="white" opacity="0.4"/>
+                            <ellipse cx="270" cy="190" rx="25" ry="12" fill="white" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-semibold text-orange-700">
+                        🔥 Trending
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <div class="text-sm text-white/80 mb-1">Jawa Timur, Indonesia</div>
+                        <h3 class="text-2xl font-bold mb-2">Gunung Bromo</h3>
+                        <p class="text-sm text-white/80 mb-4">Sunrise spektakuler di atas lautan pasir vulkanik</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">Mulai dari <span class="font-bold text-lg">Rp 1.2jt</span></div>
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-orange-500 transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5" class="group-hover:stroke-white">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 3 - Raja Ampat -->
+                <div class="dest-card group relative rounded-3xl overflow-hidden h-[420px] cursor-pointer reveal">
+                    <div class="absolute inset-0 dest-img">
+                        <svg viewBox="0 0 400 500" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="rajaSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#06b6d4"/>
+                                    <stop offset="100%" stop-color="#0891b2"/>
+                                </linearGradient>
+                                <linearGradient id="rajaWater" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#22d3ee"/>
+                                    <stop offset="100%" stop-color="#0e7490"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="500" fill="url(#rajaSky)"/>
+                            <circle cx="320" cy="100" r="40" fill="#fef3c7" opacity="0.8"/>
+                            <!-- Islands -->
+                            <path d="M50 300 Q80 250 120 280 Q140 260 160 290 L160 340 L50 340 Z" fill="#15803d"/>
+                            <path d="M200 280 Q230 240 270 270 Q290 250 310 280 L310 340 L200 340 Z" fill="#166534"/>
+                            <path d="M320 290 Q340 260 370 280 L370 340 L320 340 Z" fill="#14532d"/>
+                            <!-- Water -->
+                            <rect y="340" width="400" height="160" fill="url(#rajaWater)"/>
+                            <path d="M0 360 Q100 350 200 360 Q300 370 400 360" stroke="white" stroke-width="1" fill="none" opacity="0.4"/>
+                            <path d="M0 390 Q100 380 200 390 Q300 400 400 390" stroke="white" stroke-width="1" fill="none" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-700">
+                        💎 Premium
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <div class="text-sm text-white/80 mb-1">Papua Barat, Indonesia</div>
+                        <h3 class="text-2xl font-bold mb-2">Raja Ampat</h3>
+                        <p class="text-sm text-white/80 mb-4">Surga bawah laut dengan biodiversitas terkaya di dunia</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">Mulai dari <span class="font-bold text-lg">Rp 8.5jt</span></div>
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-cyan-500 transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2.5" class="group-hover:stroke-white">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 4 - Yogyakarta -->
+                <div class="dest-card group relative rounded-3xl overflow-hidden h-[420px] cursor-pointer reveal">
+                    <div class="absolute inset-0 dest-img">
+                        <svg viewBox="0 0 400 500" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="jogjaSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#a78bfa"/>
+                                    <stop offset="100%" stop-color="#7c3aed"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="500" fill="url(#jogjaSky)"/>
+                            <circle cx="100" cy="120" r="45" fill="#fef3c7" opacity="0.7"/>
+                            <!-- Temple -->
+                            <g fill="#4c1d95">
+                                <rect x="140" y="280" width="120" height="100"/>
+                                <path d="M130 280 L200 220 L270 280 Z"/>
+                                <path d="M150 220 L200 180 L250 220 Z"/>
+                                <path d="M170 180 L200 150 L230 180 Z"/>
+                                <rect x="180" y="340" width="40" height="40" fill="#2e1065"/>
+                            </g>
+                            <!-- Ground -->
+                            <rect y="380" width="400" height="120" fill="#1e1b4b"/>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <div class="text-sm text-white/80 mb-1">Yogyakarta, Indonesia</div>
+                        <h3 class="text-2xl font-bold mb-2">Candi Prambanan</h3>
+                        <p class="text-sm text-white/80 mb-4">Warisan budaya Hindu terbesar di Indonesia</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">Mulai dari <span class="font-bold text-lg">Rp 900rb</span></div>
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-violet-500 transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5" class="group-hover:stroke-white">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 5 - Lombok -->
+                <div class="dest-card group relative rounded-3xl overflow-hidden h-[420px] cursor-pointer reveal">
+                    <div class="absolute inset-0 dest-img">
+                        <svg viewBox="0 0 400 500" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="lombokSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#f472b6"/>
+                                    <stop offset="100%" stop-color="#ec4899"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="500" fill="url(#lombokSky)"/>
+                            <circle cx="300" cy="130" r="50" fill="#fef3c7" opacity="0.8"/>
+                            <!-- Beach -->
+                            <path d="M0 320 Q100 300 200 320 Q300 340 400 320 L400 500 L0 500 Z" fill="#fbcfe8"/>
+                            <!-- Water -->
+                            <path d="M0 360 Q100 340 200 360 Q300 380 400 360 L400 500 L0 500 Z" fill="#06b6d4"/>
+                            <!-- Palm -->
+                            <g transform="translate(80, 300)">
+                                <path d="M0 0 Q-2 -30 0 -60" stroke="#78350f" stroke-width="5" fill="none"/>
+                                <path d="M0 -60 Q-30 -65 -40 -50" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -60 Q30 -65 40 -50" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -60 Q-15 -80 -25 -70" stroke="#166534" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M0 -60 Q15 -80 25 -70" stroke="#166534" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <div class="text-sm text-white/80 mb-1">Nusa Tenggara Barat</div>
+                        <h3 class="text-2xl font-bold mb-2">Pantai Tanjung Aan</h3>
+                        <p class="text-sm text-white/80 mb-4">Pasir merica dan air laut jernih yang memikat</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">Mulai dari <span class="font-bold text-lg">Rp 2.3jt</span></div>
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-pink-500 transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2.5" class="group-hover:stroke-white">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Destination 6 - Komodo -->
+                <div class="dest-card group relative rounded-3xl overflow-hidden h-[420px] cursor-pointer reveal">
+                    <div class="absolute inset-0 dest-img">
+                        <svg viewBox="0 0 400 500" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="komodoSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#fbbf24"/>
+                                    <stop offset="100%" stop-color="#f59e0b"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="500" fill="url(#komodoSky)"/>
+                            <circle cx="320" cy="100" r="45" fill="#fef3c7" opacity="0.9"/>
+                            <!-- Hills -->
+                            <path d="M0 300 Q80 240 160 280 Q240 240 320 280 Q380 250 400 280 L400 500 L0 500 Z" fill="#92400e"/>
+                            <path d="M0 340 Q80 300 160 330 Q240 300 320 330 Q380 310 400 330 L400 500 L0 500 Z" fill="#78350f"/>
+                            <!-- Komodo dragon silhouette -->
+                            <g transform="translate(150, 380)" fill="#451a03">
+                                <ellipse cx="50" cy="20" rx="50" ry="15"/>
+                                <ellipse cx="10" cy="15" rx="15" ry="10"/>
+                                <path d="M-5 10 L-15 5 L-10 15 Z"/>
+                                <path d="M30 30 L25 45 L30 45 L35 30 Z"/>
+                                <path d="M70 30 L65 45 L70 45 L75 30 Z"/>
+                                <path d="M95 20 L115 25 L110 30 L95 25 Z"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-semibold text-amber-700">
+                        🦎 Wildlife
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <div class="text-sm text-white/80 mb-1">NTT, Indonesia</div>
+                        <h3 class="text-2xl font-bold mb-2">Pulau Komodo</h3>
+                        <p class="text-sm text-white/80 mb-4">Rumah kadal raksasa purba dan pantai pink eksotis</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">Mulai dari <span class="font-bold text-lg">Rp 5.5jt</span></div>
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-amber-500 transition">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5" class="group-hover:stroke-white">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section id="packages" class="py-24 lg:py-32 bg-gradient-to-b from-green-50/50 to-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-green-700 font-semibold text-sm uppercase tracking-wider">Paket Wisata</span>
+                <h2 class="text-4xl lg:text-5xl font-bold text-green-950 mt-4 mb-4">
+                    Pilih Paket <span class="text-gradient">Terbaik Anda</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Paket lengkap dengan berbagai pilihan destinasi dan durasi yang dapat disesuaikan
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Package 1 -->
+                <div class="pkg-card bg-white rounded-3xl p-8 border border-green-100 reveal">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-semibold text-green-700 uppercase tracking-wider">Starter</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-950 mb-2">Paket Hemat</h3>
+                    <p class="text-gray-600 text-sm mb-6">Cocok untuk solo traveler atau backpacker</p>
+                    
+                    <div class="mb-6 pb-6 border-b border-green-100">
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-sm text-gray-500">Mulai</span>
+                            <span class="text-4xl font-bold text-green-800">Rp 900rb</span>
+                            <span class="text-sm text-gray-500">/pax</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>2 Hari 1 Malam</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Transportasi AC</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Hotel bintang 3</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Guide lokal</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Documentation foto</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="#contact" class="btn-outline block text-center px-6 py-3 rounded-full font-semibold">
+                        Pilih Paket
+                    </a>
+                </div>
+                
+                <!-- Package 2 - Featured -->
+                <div class="pkg-card pkg-featured rounded-3xl p-8 text-white relative overflow-hidden reveal">
+                    <div class="absolute top-6 right-6 bg-white/20 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold">
+                        ★ TERLARIS
+                    </div>
+                    <div class="absolute -top-20 -right-20 w-60 h-60 bg-white/5 rounded-full"></div>
+                    <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-white/5 rounded-full"></div>
+                    
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-semibold text-green-200 uppercase tracking-wider">Popular</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Paket Premium</h3>
+                        <p class="text-green-100 text-sm mb-6">Pengalaman terbaik dengan fasilitas lengkap</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-white/20">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-sm text-green-200">Mulai</span>
+                                <span class="text-4xl font-bold">Rp 2.5jt</span>
+                                <span class="text-sm text-green-200">/pax</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>4 Hari 3 Malam</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>Private car + driver</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>Hotel bintang 4</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>Professional guide</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>All meals included</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>Photographer profesional</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                <span>Travel insurance</span>
+                            </li>
+                        </ul>
+                        
+                        <a href="#contact" class="block text-center px-6 py-3 rounded-full font-semibold bg-white text-green-800 hover:bg-green-50 transition">
+                            Pilih Paket
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Package 3 -->
+                <div class="pkg-card bg-white rounded-3xl p-8 border border-green-100 reveal">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                                <path d="M2 7l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-semibold text-green-700 uppercase tracking-wider">Exclusive</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-950 mb-2">Paket Luxury</h3>
+                    <p class="text-gray-600 text-sm mb-6">Pengalaman eksklusif tanpa kompromi</p>
+                    
+                    <div class="mb-6 pb-6 border-b border-green-100">
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-sm text-gray-500">Mulai</span>
+                            <span class="text-4xl font-bold text-green-800">Rp 8jt</span>
+                            <span class="text-sm text-gray-500">/pax</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>7 Hari 6 Malam</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Private jet/charter</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Resort bintang 5</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Personal butler</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Fine dining experience</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-sm text-gray-700">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" class="flex-shrink-0 mt-0.5">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            <span>Videographer cinematic</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="#contact" class="btn-outline block text-center px-6 py-3 rounded-full font-semibold">
+                        Pilih Paket
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="py-24 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-green-700 font-semibold text-sm uppercase tracking-wider">Testimoni</span>
+                <h2 class="text-4xl lg:text-5xl font-bold text-green-950 mt-4 mb-4">
+                    Cerita dari <span class="text-gradient">Traveler Kami</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Ribuan traveler telah mempercayakan perjalanan mereka kepada kami
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="testi-card bg-green-50 rounded-3xl p-8 reveal">
+                    <div class="flex gap-1 mb-4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        "Pelayanan luar biasa! Trip ke Bromo bersama Wisatura sangat berkesan. Guide-nya ramah dan profesional. Itinerary-nya pas, tidak terlalu padat tapi tetap dapat banyak spot foto. Pasti akan pakai jasa mereka lagi!"
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-green-100">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
+                            AS
+                        </div>
+                        <div>
+                            <div class="font-bold text-green-950">Andi Saputra</div>
+                            <div class="text-sm text-gray-500">Jakarta • Trip Bromo</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testi-card bg-green-50 rounded-3xl p-8 reveal">
+                    <div class="flex gap-1 mb-4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        "Harga sangat kompetitif dengan kualitas layanan premium. Sudah 3 kali pakai jasa Wisatura dan selalu puas. Tim-nya responsif, hotelnya nyaman, makanannya enak. Recommended banget buat yang mau liburan tanpa ribet!"
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-green-100">
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold">
+                            SR
+                        </div>
+                        <div>
+                            <div class="font-bold text-green-950">Sari Rahayu</div>
+                            <div class="text-sm text-gray-500">Surabaya • Trip Bali</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testi-card bg-green-50 rounded-3xl p-8 reveal">
+                    <div class="flex gap-1 mb-4">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        "Trip ke Raja Ampat bareng Wisatura benar-benar amazing! Semua terorganisir dengan baik, dari transportasi, penginapan, sampai diving spot-nya. Photographer-nya juga jago, hasil fotonya keren-keren!"
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-green-100">
+                        <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
+                            BW
+                        </div>
+                        <div>
+                            <div class="font-bold text-green-950">Budi Wijaya</div>
+                            <div class="text-sm text-gray-500">Bandung • Trip Raja Ampat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-24 bg-green-50/50">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-green-700 font-semibold text-sm uppercase tracking-wider">FAQ</span>
+                <h2 class="text-4xl lg:text-5xl font-bold text-green-950 mt-4 mb-4">
+                    Pertanyaan <span class="text-gradient">Umum</span>
+                </h2>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="faq-item bg-white rounded-2xl p-6 border border-green-100 reveal">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left">
+                        <span class="font-semibold text-green-950">Bagaimana cara memesan paket wisata?</span>
+                        <div class="faq-icon w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer mt-4">
+                        <p class="text-gray-600 leading-relaxed">Anda bisa menghubungi kami via WhatsApp, telepon, atau langsung datang ke kantor kami. Tim kami akan membantu memilihkan paket yang sesuai dengan kebutuhan dan budget Anda.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-2xl p-6 border border-green-100 reveal">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left">
+                        <span class="font-semibold text-green-950">Apakah bisa custom itinerary?</span>
+                        <div class="faq-icon w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer mt-4">
+                        <p class="text-gray-600 leading-relaxed">Tentu! Kami menyediakan layanan private trip dengan itinerary yang bisa disesuaikan dengan preferensi Anda. Konsultasikan dengan tim kami untuk rencana perjalanan yang sempurna.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-2xl p-6 border border-green-100 reveal">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left">
+                        <span class="font-semibold text-green-950">Berapa minimal peserta untuk open trip?</span>
+                        <div class="faq-icon w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer mt-4">
+                        <p class="text-gray-600 leading-relaxed">Minimal peserta untuk open trip adalah 1 orang. Anda akan bergabung dengan traveler lain dalam satu grup yang seru dan kompak. Untuk private trip, minimal 2 orang.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-2xl p-6 border border-green-100 reveal">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left">
+                        <span class="font-semibold text-green-950">Bagaimana sistem pembayarannya?</span>
+                        <div class="faq-icon w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer mt-4">
+                        <p class="text-gray-600 leading-relaxed">DP 50% saat booking untuk mengkonfirmasi pesanan, dan pelunasan H-7 sebelum keberangkatan. Kami menerima transfer bank, e-wallet, dan kartu kredit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact" class="py-24 lg:py-32 bg-green-950 relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute top-10 left-10 w-96 h-96 bg-green-700/30 blob blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-green-600/20 blob blur-3xl" style="animation-delay: -5s;"></div>
+        </div>
+        
+        <div class="max-w-5xl mx-auto px-6 lg:px-8 relative">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <span class="text-green-300 font-semibold text-sm uppercase tracking-wider">Hubungi Kami</span>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-white mt-4 mb-6 leading-tight">
+                        Siap untuk Petualangan <span class="text-green-300">Berikutnya?</span>
+                    </h2>
+                    <p class="text-green-100 text-lg mb-8 leading-relaxed">
+                        Hubungi kami sekarang dan wujudkan liburan impian Anda bersama Wisatura. Tim kami siap membantu 24/7.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <a href="https://wa.me/6281234567890" class="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition border border-white/10">
+                            <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-green-300">WhatsApp</div>
+                                <div class="text-white font-semibold">+62 812-3456-7890</div>
+                            </div>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="mailto:hello@wisatura.id" class="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition border border-white/10">
+                            <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-green-300">Email</div>
+                                <div class="text-white font-semibold">hello@wisatura.id</div>
+                            </div>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition border border-white/10">
+                            <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-cyan-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-green-300">TikTok</div>
+                                <div class="text-white font-semibold">@wisaturatrip</div>
+                            </div>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="reveal">
+                    <form class="bg-white rounded-3xl p-8 shadow-2xl">
+                        <h3 class="text-2xl font-bold text-green-950 mb-6">Kirim Pesan</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
+                                <input type="text" placeholder="Masukkan nama Anda" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                                <input type="email" placeholder="email@example.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">No. WhatsApp</label>
+                                <input type="tel" placeholder="08xxxxxxxxxx" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Destinasi Impian</label>
+                                <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:outline-none transition">
+                                    <option>Pilih destinasi</option>
+                                    <option>Bali</option>
+                                    <option>Raja Ampat</option>
+                                    <option>Bromo</option>
+                                    <option>Labuan Bajo</option>
+                                    <option>Lombok</option>
+                                    <option>Yogyakarta</option>
+                                    <option>Lainnya</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Pesan</label>
+                                <textarea rows="3" placeholder="Ceritakan rencana perjalanan Anda" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:outline-none transition resize-none"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary w-full px-6 py-3.5 rounded-xl font-semibold">
+                                Kirim Pesan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-green-950 text-white pt-16 pb-8 border-t border-green-900">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <div>
+                    <div class="flex items-center gap-2.5 mb-6">
+                        <svg width="36" height="36" viewBox="0 0 48 48" fill="none">
+                            <path d="M24 4L8 14v20l16 10 16-10V14L24 4z" fill="#22c55e"/>
+                            <path d="M24 14l-8 5v10l8 5 8-5V19l-8-5z" fill="#4ade80"/>
+                            <circle cx="24" cy="24" r="3" fill="white"/>
+                        </svg>
+                        <span class="text-xl font-bold">Wisatura</span>
+                    </div>
+                    <p class="text-green-200 text-sm leading-relaxed mb-6">
+                        Biro perjalanan wisata terpercaya yang menghadirkan pengalaman menjelajah Nusantara yang otentik dan berkesan.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="https://www.tiktok.com/@wisaturatrip" target="_blank" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-6">Destinasi</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Bali</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Raja Ampat</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Bromo</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Labuan Bajo</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Lombok</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Yogyakarta</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-6">Perusahaan</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#about" class="text-green-200 hover:text-white transition">Tentang Kami</a></li>
+                        <li><a href="#packages" class="text-green-200 hover:text-white transition">Paket Wisata</a></li>
+                        <li><a href="#testimonials" class="text-green-200 hover:text-white transition">Testimoni</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Karir</a></li>
+                        <li><a href="#" class="text-green-200 hover:text-white transition">Blog</a></li>
+                        <li><a href="#contact" class="text-green-200 hover:text-white transition">Kontak</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-6">Kontak</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-3 text-green-200">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 mt-0.5">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span>Jl. Wisata Nusantara No. 88, Jakarta Selatan</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-green-200">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 mt-0.5">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                            <span>+62 812-3456-7890</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-green-200">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 mt-0.5">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            <span>hello@wisatura.id</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-6 p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div class="text-xs text-green-300 mb-1">Jam Operasional</div>
+                        <div class="text-sm text-white">Senin - Minggu: 08.00 - 22.00 WIB</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-green-900 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-green-300">© 2026 Wisatura. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-green-300 hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="text-green-300 hover:text-white transition">Terms of Service</a>
+                    <a href="#" class="text-green-300 hover:text-white transition">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-2xl z-40 transition hover:scale-110">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping"></span>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full"></span>
+    </a>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 800);
+        });
+        
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+        
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        });
+        
+        // Reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        
+        // Counter animation
+        const counters = document.querySelectorAll('.stat-number');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.dataset.target);
+                    const duration = 2000;
+                    const step = target / (duration / 16);
+                    let current = 0;
+                    
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            entry.target.textContent = Math.floor(current).toLocaleString('id-ID') + '+';
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            entry.target.textContent = target.toLocaleString('id-ID') + '+';
+                        }
+                    };
+                    updateCounter();
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        counters.forEach(counter => counterObserver.observe(counter));
+        
+        // FAQ toggle
+        document.querySelectorAll('.faq-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const item = toggle.closest('.faq-item');
+                const isOpen = item.classList.contains('open');
+                
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                
+                if (!isOpen) {
+                    item.classList.add('open');
+                }
+            });
+        });
+        
+        // Form submit
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Terima kasih! Pesan Anda telah terkirim. Tim kami akan segera menghubungi Anda.');
+            e.target.reset();
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
